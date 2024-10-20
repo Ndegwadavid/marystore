@@ -9,6 +9,8 @@ import Cart from './pages/Cart';
 import Favorites from './pages/Favorites';
 import Checkout from './pages/Checkout';
 import CheckoutSuccess from './pages/CheckoutSuccess';
+import CreateAccount from './pages/CreateAccount';
+import Login from './pages/Login';
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/products" element={<Products />} />
+                <Route path="/create-account" element={<CreateAccount />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/checkout" element={<Checkout />} />

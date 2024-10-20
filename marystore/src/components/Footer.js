@@ -29,8 +29,8 @@ const Footer = () => {
           </div>
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact Us</h4>
-            <p>123 Main St, Anytown, USA 12345</p>
-            <p>Phone: (123) 456-7890</p>
+            <p>00100 Nairobi Moi Avenue</p>
+            <p>Phone: (=254) 797342380</p>
             <p>Email: info@marystore.com</p>
           </div>
         </div>

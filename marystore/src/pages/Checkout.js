@@ -27,6 +27,8 @@ const Checkout = () => {
   });
   const [errors, setErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
+  const [checkoutType, setCheckoutType] = useState('guest'); // New state for checkout type
+  const exchangeRate = 140; // Example exchange rate from USD to KES
 
   useEffect(() => {
     if (cart.length === 0) {
@@ -51,14 +53,18 @@ const Checkout = () => {
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
+    if (checkoutType === 'account') {
+      if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+      if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
+      if (!formData.email.trim()) {
+        newErrors.email = 'Email is required';
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = 'Invalid email format';
+      }
+      if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
     }
-    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+
+    // Common validation
     if (!formData.address.trim()) newErrors.address = 'Address is required';
     if (!formData.city.trim()) newErrors.city = 'City is required';
     if (!formData.state.trim()) newErrors.state = 'State is required';
@@ -123,6 +129,8 @@ const Checkout = () => {
     visible: { opacity: 1 }
   };
 
+  const totalInKES = (getCartTotal() * exchangeRate).toFixed(2); // Convert total to KES
+
   return (
     <motion.div 
       initial="hidden"
@@ -133,6 +141,38 @@ const Checkout = () => {
       <h2 className="text-3xl font-semibold mb-8 text-center">Checkout</h2>
       
       <div className="grid md:grid-cols-3 gap-8">
+        {/* Checkout Type Selection */}
+        <div className="md:col-span-2 mb-4">
+          <h3 className="text-lg font-semibold mb-4">Checkout as:</h3>
+          <div className="flex space-x-4">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="checkoutType"
+                value="guest"
+                checked={checkoutType === 'guest'}
+                onChange={() => setCheckoutType('guest')}
+                className="mr-2"
+              />
+              Guest
+            </label>
+            <label className="flex items-center">
+  <input
+    type="radio"
+    name="checkoutType"
+    value="account"
+    checked={checkoutType === 'account'}
+    onChange={() => {
+      setCheckoutType('account');
+      navigate('/create-account'); // Redirect to account creation
+    }}
+    className="mr-2"
+  />
+  Create Account
+</label>
+          </div>
+        </div>
+
         {/* Checkout Form */}
         <motion.form 
           onSubmit={handleSubmit} 
@@ -141,50 +181,52 @@ const Checkout = () => {
           animate={{ x: 0 }}
           transition={{ type: "spring", stiffness: 100 }}
         >
-          {/* Personal Information */}
-          <motion.div 
-            className="bg-white p-6 rounded-lg shadow-md"
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <h3 className="text-xl font-semibold mb-4 flex items-center">
-              <User className="mr-2" /> Personal Information
-            </h3>
-            <div className="grid grid-cols-2 gap-4">
-              <InputField
-                label="First Name"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                error={errors.firstName}
-              />
-              <InputField
-                label="Last Name"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                error={errors.lastName}
-              />
-              <InputField
-                label="Email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                error={errors.email}
-                icon={<Mail className="w-5 h-5 text-gray-400" />}
-              />
-              <InputField
-                label="Phone"
-                name="phone"
-                type="tel"
-                value={formData.phone}
-                onChange={handleInputChange}
-                error={errors.phone}
-                icon={<Phone className="w-5 h-5 text-gray-400" />}
-              />
-            </div>
-          </motion.div>
+          {/* Personal Information for Guest Checkout */}
+          {checkoutType === 'guest' && (
+            <motion.div 
+              className="bg-white p-6 rounded-lg shadow-md"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <h3 className="text-xl font-semibold mb-4 flex items-center">
+                <User className="mr-2" /> Personal Information
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <InputField
+                  label="First Name"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  error={errors.firstName}
+                />
+                <InputField
+                  label="Last Name"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  error={errors.lastName}
+                />
+                <InputField
+                  label="Email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  error={errors.email}
+                  icon={<Mail className="w-5 h-5 text-gray-400" />}
+                />
+                <InputField
+                  label="Phone"
+                  name="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  error={errors.phone}
+                  icon={<Phone className="w-5 h-5 text-gray-400" />}
+                />
+              </div>
+            </motion.div>
+          )}
 
           {/* Billing Information */}
           <motion.div 
@@ -391,7 +433,7 @@ const Checkout = () => {
                   </div>
                   <p className="font-medium">
                     ${(item.price * item.quantity).toFixed(2)}
-                    </p>
+                  </p>
                 </motion.div>
               ))}
               <motion.div 
@@ -402,7 +444,7 @@ const Checkout = () => {
               >
                 <div className="flex justify-between font-semibold text-lg">
                   <p>Total</p>
-                  <p>${getCartTotal().toFixed(2)}</p>
+                  <p>${getCartTotal().toFixed(2)} / KES {totalInKES}</p> {/* Display total in KES */}
                 </div>
               </motion.div>
             </div>
