@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Heart, ShoppingCart, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useFavorites } from '../context/FavoritesContext';
@@ -8,12 +8,21 @@ const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const { toggleFavorite, favorites } = useFavorites();
   const [showAddedToCart, setShowAddedToCart] = useState(false);
-  const isFavorite = favorites.some(item => item.id === product.id);
+  
+  // Ensure favorites is defined before using .some()
+  const isFavorite = Array.isArray(favorites) && 
+    favorites.some(item => item.id === product.id);
 
   const handleAddToCart = () => {
     addToCart(product);
     setShowAddedToCart(true);
     setTimeout(() => setShowAddedToCart(false), 2000);
+  };
+
+  const handleToggleFavorite = () => {
+    if (toggleFavorite) {
+      toggleFavorite(product);
+    }
   };
 
   return (
@@ -32,7 +41,7 @@ const ProductCard = ({ product }) => {
         />
         <motion.button
           whileTap={{ scale: 0.9 }}
-          onClick={() => toggleFavorite(product)}
+          onClick={handleToggleFavorite}
           className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-md"
         >
           <Heart 
