@@ -22,8 +22,8 @@ const HomePage = () => {
   const featuredProducts = [
     {
       id: 1,
-      name: "Luxury Scented Candle",
-      price: 29.99,
+      name: "Luxury Scented Candle set",
+      price: 2500,
       image: "/images/candle.jpeg",
       category: "Home Fragrance",
       rating: 4.8,
@@ -32,7 +32,7 @@ const HomePage = () => {
     {
       id: 2,
       name: "Premium Gift Set",
-      price: 79.99,
+      price: 6000,
       image: "/images/gift.jpeg",
       category: "Gift Sets",
       rating: 4.9,
@@ -44,7 +44,7 @@ const HomePage = () => {
   // Hero slider data
   const heroSlides = [
     {
-      title: "Luxury Candle Collection",
+      title: "Luxury ScentedCandle Collection",
       description: "Discover our handcrafted scented candles",
       image: "/images/candle.jpeg",
       cta: "Shop Now",
@@ -175,7 +175,7 @@ const HomePage = () => {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold">${product.price}</span>
+                    <span className="text-xl font-bold">Ksh {product.price}</span>
                     <button
                       onClick={() => handleAddToCart(product)}
                       className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors"
@@ -219,7 +219,7 @@ const HomePage = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-6 left-6 text-white">
-                <h3 className="text-xl font-semibold mb-2">Candles</h3>
+                <h3 className="text-xl font-semibold mb-2">Scented Candles</h3>
                 <p className="flex items-center">
                   Shop Now
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -245,13 +245,29 @@ const HomePage = () => {
 
             <Link to="/products" className="group relative h-64 rounded-lg overflow-hidden">
               <img
-                src="/api/placeholder/400/320"
+                src="/images/mug.jpeg"
+                alt="Mugs"
+                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute bottom-6 left-6 text-white">
+                <h3 className="text-xl font-semibold mb-2">Imprinted Mugs</h3>
+                <p className="flex items-center">
+                  Shop Now
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </p>
+              </div>
+            </Link>
+
+            <Link to="/products" className="group relative h-64 rounded-lg overflow-hidden">
+              <img
+                src="/images/waterbottle.jpeg"
                 alt="Fragrances"
                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-6 left-6 text-white">
-                <h3 className="text-xl font-semibold mb-2">Fragrances</h3>
+                <h3 className="text-xl font-semibold mb-2">Waterbottles</h3>
                 <p className="flex items-center">
                   Shop Now
                   <ArrowRight className="ml-2 h-4 w-4" />
